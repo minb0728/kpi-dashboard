@@ -1,7 +1,6 @@
-// 실습용 공개 설정 자리표시자입니다. 실제 프로젝트 값은 입력되어 있지 않습니다.
-// 현재 앱은 이 파일을 읽지 않으며 Supabase에 연결하지 않습니다.
-
-//supabase의 프로젝트Url, publish key 복사붙여넣기
+// 실제 값이 아닌 예시입니다. 기존 앱 폴더에서 config.js로 복사해 사용합니다.
+// 프로젝트 주소와 공개용 publishable key만 넣으세요.
+// 비밀번호, secret/service_role 키는 넣지 않습니다.
 window.KPI_CONFIG = {
   supabaseUrl: "https://aajkgatgkxostugceave.supabase.co",
   supabasePublishableKey: "sb_publishable_16ZyJ1A5cMdpkalAGcnv3Q_1StZTYor"

@@ -1,58 +1,10 @@
-<!doctype html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f7fb">
-  <title>Metric — KPI 대시보드</title>
-  <link rel="stylesheet" href="style.css">
-  <script defer src="config.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0"></script>
-  <script defer src="core.js"></script>
-  <script defer src="repository.js"></script>
-  <script defer src="app.js"></script>
-</head>
-<body>
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="주 메뉴">
-      <a class="brand" href="#main" aria-label="Metric 홈"><span class="brand-mark">m</span><span>metric<span class="brand-dot">.</span></span></a>
-      <div class="workspace-label">WORKSPACE</div>
-      <div class="workspace"><span class="workspace-avatar">N</span><span><strong>노바 스튜디오</strong><small>팀 워크스페이스</small></span><span class="chevron">⌄</span></div>
-      <div class="nav-label">분석</div>
-      <nav class="nav-list">
-        <a class="nav-item active" href="#main"><span class="nav-icon">▦</span>대시보드</a>
-        <a class="nav-item" href="#evidence"><span class="nav-icon">▤</span>KPI 리포트</a>
-        <a class="nav-item" href="#filters"><span class="nav-icon">◷</span>기간별 추이</a>
-      </nav>
-      <div class="sidebar-bottom"><div class="help-card"><div class="help-icon">✳</div><strong>도움이 필요하신가요?</strong><p>대시보드 사용 방법을 확인해보세요.</p><a href="#guide">가이드 보기 <span>↗</span></a></div><div class="profile"><div class="profile-avatar">김</div><div class="profile-copy"><strong id="profile-name">김민지</strong><small id="profile-role">운영 담당자</small></div><button class="icon-button profile-more" aria-label="프로필 메뉴">···</button></div></div>
-    </aside>
-
-    <main class="main-content" id="main">
-      <header class="topbar"><div class="breadcrumb"><span>워크스페이스</span><span class="crumb-sep">/</span><strong>대시보드</strong></div><div class="top-actions"><span class="sample-badge" id="mode-badge"><i></i> 연결 확인 중</span><button class="icon-button notification" aria-label="알림">♧<i></i></button><div class="top-avatar" id="top-avatar">김</div></div></header>
-      <div class="page-wrap">
-        <section class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span>PERFORMANCE OVERVIEW</div><h1>KPI 대시보드</h1><p>목표와 실적을 한눈에 확인하고, 팀의 다음 성장을 준비하세요.</p></div><button class="primary-button" id="open-entry"><span>＋</span> KPI 입력</button></section>
-        <section class="connection-panel" id="connection-panel" data-state="loading" aria-label="데이터 연결 및 로그인">
-          <div class="connection-info"><span class="connection-dot"></span><div><strong id="connection-status">연결 상태 확인 중</strong><p id="connection-detail">설정과 저장소 상태를 확인하고 있습니다.</p></div></div>
-          <form class="login-form" id="login-form" hidden><label>이메일<input id="login-email" type="email" autocomplete="username" required></label><label>비밀번호<input id="login-password" type="password" autocomplete="current-password" required></label><button class="primary-button" id="login-button" type="submit">로그인</button></form>
-          <div class="signed-in-controls" id="signed-in-controls" hidden><span id="signed-in-email"></span><button class="secondary-button" id="logout-button" type="button">로그아웃</button></div>
-        </section>
-        <section class="filter-panel" id="filters" aria-label="대시보드 필터"><div class="filter-title"><span class="filter-symbol">☷</span><strong>보기 설정</strong></div><div class="filter-controls"><label class="select-wrap"><span>기간</span><select id="month-filter" aria-label="월 필터"><option value="all">전체 기간</option></select><b>⌄</b></label><label class="select-wrap"><span>부서</span><select id="team-filter" aria-label="부서 필터"><option value="all">전체 부서</option></select><b>⌄</b></label><button class="reset-button" id="reset-filters">초기화 <span>↺</span></button></div><div class="updated-label"><i></i> 방금 업데이트</div></section>
-        <section class="summary-grid" aria-label="핵심 지표">
-          <article class="metric-card"><div class="metric-top"><span class="metric-label">목표 합계</span><span class="metric-icon target-icon">◎</span></div><div class="metric-value" id="target-total">—</div><div class="metric-foot"><span class="foot-dot blue"></span><span>선택한 기간의 목표 금액</span></div></article>
-          <article class="metric-card"><div class="metric-top"><span class="metric-label">실적 합계</span><span class="metric-icon actual-icon">↗</span></div><div class="metric-value" id="actual-total">—</div><div class="metric-foot"><span class="foot-dot green"></span><span>선택한 기간의 실적 금액</span></div></article>
-          <article class="metric-card attainment-card"><div class="metric-top"><span class="metric-label">목표 달성률</span><span class="metric-icon rate-icon">◉</span></div><div class="metric-value rate-value" id="attainment-rate">—</div><div class="rate-track"><span id="rate-track-fill"></span></div><div class="metric-foot"><span class="foot-dot purple"></span><span id="rate-caption">실적 ÷ 목표 × 100</span></div></article>
-          <article class="metric-card"><div class="metric-top"><span class="metric-label">등록 건수</span><span class="metric-icon count-icon">▤</span></div><div class="metric-value"><span id="record-count">—</span><small>건</small></div><div class="metric-foot"><span class="foot-dot amber"></span><span>현재 조회 중인 KPI</span></div></article>
-        </section>
-        <section class="evidence-section" id="evidence">
-          <div class="section-heading"><div><div class="section-title-row"><h2>상세 실적</h2><span class="record-pill" id="record-pill">0건</span></div><p>필터 조건에 해당하는 월·부서별 목표와 실적입니다.</p></div><button class="export-button" id="export-button" title="표 데이터를 CSV로 저장"><span>⇩</span> 내보내기</button></div>
-          <div class="table-card"><div class="table-scroll"><table><thead><tr><th scope="col">월</th><th scope="col">부서</th><th scope="col" class="numeric">목표 금액</th><th scope="col" class="numeric">실적 금액</th><th scope="col" class="numeric">달성률</th><th scope="col" class="numeric">차이</th><th scope="col"><span class="sr-only">작업</span></th></tr></thead><tbody id="records-body"></tbody></table></div><div class="empty-state" id="empty-state" hidden><div class="empty-icon">⌕</div><strong id="empty-title">표시할 데이터가 없습니다</strong><p id="empty-description">선택한 조건에 맞는 실적이 없습니다. 필터를 바꾸거나 KPI를 입력해보세요.</p><button class="secondary-button" id="empty-action">KPI 입력하기</button></div><div class="error-state" id="error-state" hidden><div class="error-icon">!</div><strong>데이터를 불러오지 못했습니다</strong><p id="error-description">잠시 후 다시 시도해주세요.</p><button class="secondary-button" id="retry-button">다시 시도</button></div><div class="table-footer"><span id="table-count">총 0건</span><span>금액 단위: 원</span></div></div>
-          <div class="data-note"><span class="note-icon">ⓘ</span> 현재 화면은 샘플 데이터로 구성되어 있으며, 입력한 내용은 이 브라우저 세션에서만 유지됩니다.</div>
-        </section>
-        <footer class="page-footer"><span>© 2026 Metric Dashboard</span><span id="guide">목표 달성률 = 실적 합계 ÷ 목표 합계 × 100</span></footer>
-      </div>
-    </main>
-  </div>
-  <dialog class="entry-dialog" id="entry-dialog" aria-labelledby="dialog-title"><form id="entry-form" novalidate><div class="dialog-head"><div><span class="dialog-kicker">NEW KPI RECORD</span><h2 id="dialog-title">실적 입력</h2></div><button type="button" class="icon-button close-dialog" aria-label="닫기">×</button></div><p class="dialog-intro">월과 부서를 선택하고 목표 및 실적을 입력하세요.</p><label class="form-field">월<input id="input-month" type="month" required></label><label class="form-field">부서<input id="input-team" type="text" maxlength="160" placeholder="예: 영업팀" required></label><div class="form-row"><label class="form-field">목표 금액 <span>(원)</span><input id="input-target" type="number" min="0" step="1" inputmode="numeric" placeholder="0" required></label><label class="form-field">실적 금액 <span>(원)</span><input id="input-actual" type="number" min="0" step="1" inputmode="numeric" placeholder="0" required></label></div><div class="form-error" id="form-error" role="alert" hidden></div><div class="dialog-actions"><button type="button" class="secondary-button close-dialog">취소</button><button type="submit" class="primary-button" id="save-record">KPI 저장</button></div><p class="dialog-note" id="entry-mode-note">저장 내용은 현재 모드에 따라 처리됩니다.</p></form></dialog>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-</body>
-</html>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KPI 대시보드 · Supabase 기본 완성 예제</title><link rel="icon" href="data:,"><link rel="stylesheet" href="style.css"></head><body><header><div class="eyebrow">업무 데이터를 한눈에 · 가상 KPI 실습</div><h1>KPI 대시보드</h1><p>월·부서별 목표와 실적을 비교합니다.</p></header><main>
+<section class="panel mode-bar"><strong id="mode-label">샘플 모드 · DB 미연결</strong><span id="mode-detail">가상 6건으로 표시합니다. 새로고침하면 초기 상태로 돌아갑니다.</span></section>
+<p id="message" class="message" role="status" aria-live="polite"></p>
+<section class="panel"><h2>앱 로그인과 연결</h2><div class="toolbar"><button id="sample-mode" type="button">샘플로 돌아가기</button><button id="db-mode" type="button">Supabase 연결</button></div><p class="muted">config.js에 본인 공개 설정값을 입력한 뒤 Supabase 연결을 누르세요. 콘솔 계정이 아닌 준비한 앱 사용자로 로그인합니다.</p><div id="auth-panel" hidden><form id="login"><fieldset id="auth-fields"><div class="grid two"><label>이메일<input id="email" type="email" autocomplete="username" required></label><label>비밀번호<input id="password" type="password" autocomplete="current-password" required></label></div><button type="submit">로그인</button></fieldset></form><p id="account">로그아웃 상태</p><button id="logout" type="button" hidden>로그아웃</button><button id="refresh" type="button">다시 조회</button></div></section>
+<section class="panel"><h2>KPI 한 건 저장</h2><p>샘플 모드에서는 저장하지 않습니다. 실제 DB 연결 후 본인 자료로 저장합니다.</p><form id="record"><fieldset id="record-fields" disabled><div class="grid two"><label>월<input id="month" type="month" value="2026-10" required></label><label>부서<input id="team" maxlength="80" value="영업B" required></label><label>목표 원<input id="target" inputmode="numeric" value="8000000" required></label><label>실적 원<input id="actual" inputmode="numeric" value="7200000" required></label></div><button type="submit" class="primary">본인 DB에 저장</button></fieldset></form></section>
+<section class="panel"><h2>조회 조건</h2><div class="toolbar"><label>월<select id="filter-month"></select></label><label>부서<select id="filter-team"></select></label><label id="user-filter-label" hidden>사용자 UUID<select id="filter-user"></select></label><button id="filter-reset" type="button">필터 초기화</button></div></section>
+<div class="stats" aria-live="polite"><div class="stat"><span>목표 합계</span><strong id="total-target"></strong></div><div class="stat"><span>실적 합계</span><strong id="total-actual"></strong></div><div class="stat"><span>달성률</span><strong id="total-rate"></strong></div><div class="stat"><span>조회 건수</span><strong id="total-count"></strong></div></div>
+<section class="panel"><h2>부서별 달성률</h2><p class="muted">막대는 100%까지 표시하며 실제 달성률은 숫자로 확인합니다.</p><div id="chart"></div></section>
+<section class="panel"><h2>계산 근거표</h2><p id="empty" hidden>조건에 맞는 데이터가 없습니다.</p><div class="table-wrap"><table><thead><tr><th>월</th><th>부서</th><th>목표 원</th><th>실적 원</th><th>달성률</th><th id="owner-head" hidden>사용자 UUID</th><th id="action-head" hidden>편집</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+<p class="footer">달성률 = 실적 합계 ÷ 목표 합계 × 100 · 목표 합계가 0이면 ‘목표 미설정’ · 모든 예시 값은 가상입니다.</p></main><script src="core.js"></script><script src="app.js"></script><script src="config.js"></script><script src="backend.js"></script></body></html>
