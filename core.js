@@ -36,8 +36,10 @@
     const target = Number(input.target);
     const actual = Number(input.actual);
     if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) throw new Error("올바른 월을 선택해주세요.");
-    if (!team || team.length > 80) throw new Error("부서명은 1~80자로 입력해주세요.");
-    if (input.target === "" || input.actual === "" || !Number.isSafeInteger(target) || !Number.isSafeInteger(actual) || target < 0 || actual < 0) {
+    if (!team || Array.from(team).length > 80) throw new Error("부서명은 1~80자로 입력해주세요.");
+    const targetMissing = input.target === null || input.target === undefined || String(input.target).trim() === "";
+    const actualMissing = input.actual === null || input.actual === undefined || String(input.actual).trim() === "";
+    if (targetMissing || actualMissing || !Number.isSafeInteger(target) || !Number.isSafeInteger(actual) || target < 0 || actual < 0) {
       throw new Error("목표와 실적은 0 이상의 정수로 입력해주세요.");
     }
     if (existingRecords.some((record) => record.month === month && record.team === team)) {
